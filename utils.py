@@ -3,7 +3,7 @@ Name: utils.py
 Author: Arthur RETAILLAUD E1
 Contact: arthur.retaillaud@reseau.eseo.fr
 Date of creation: 29/04/2026
-Date of last modifications: 29/04/2026
+Date of last modifications: 01/05/2026
 Description: This file contains all the functions related to the user interface of the program, such as the welcome screen, the configuration questions, and the text and key input. It also contains some public variables that are used in other files, such as the alphabet used for the Playfair cipher.
 '''
 
@@ -30,8 +30,9 @@ def welcome_screen():
             "\n[magenta][underline]Description:[/underline] With this little educational tool, you will be able to test the Playfair encryption method.\nIt is only possible to encrypt textual messages with the 26 capital letters of the alphabet and some punctuation.\nOf course it is also possible to use the decryption method.[/magenta]\n"
             "\n[yellow]⚠️ [underline]Warning:[/underline] Seriously, just don't use this project to encrypt important messages... ⚠️[/yellow]\n"),
             title="🌸 Message Encrypter and Decrypter 🌸",
-            width=140,
-        ))
+            width=140
+            )
+        )
     )
     print("\n")
     console.print(Align.center(
@@ -41,12 +42,36 @@ def welcome_screen():
                          "[magenta][underline]Version:[/underline] Beta[/magenta]\n"
                          "[magenta][underline]License:[/underline] No license needed, just do whatever you want with this thing...[/magenta]\n"),
             title="Project informations",
-            width=80,
+            width=80
             )
         )
     )
 
 #---------------------------------------Ask configuration
+def ask_start():
+    print("\n\n")
+    console = Console()
+    console.print(
+        Panel(
+            Align.center(
+                "\n[bold #ff69b4]Choose the action you want to do[/bold #ff69b4]\n"),
+            width=60
+        )
+    )
+
+    action_chosen = inquirer.select(
+        message="\nChoose an action:",
+        choices=[
+            "Start the program",
+            "Check for updates",
+            "Exit the program"
+        ],
+        qmark="",
+        pointer="➤ "
+    ).execute()
+
+    return action_chosen
+
 def ask_algorithm():
     print("\n\n")
     console = Console()
@@ -54,7 +79,7 @@ def ask_algorithm():
         Panel(
             Align.center("\n[bold #ff69b4][underline]Step 1:[/underline] Choose the encryption algorithm you want to use[/bold #ff69b4]\n"
                          "[underline]Note:[/underline] New algorithms will be released in the next versions, please be patient.\n"),
-            width=60,
+            width=60
         )
     )
 
@@ -64,7 +89,7 @@ def ask_algorithm():
             "Playfair"
         ],
         qmark="",
-        pointer="➤ ",
+        pointer="➤ "
     ).execute()
 
     return algorithm_chosen
@@ -75,7 +100,7 @@ def ask_action():
     console.print(
         Panel(
             Align.center("\n[bold #ff69b4][underline]Step 2:[/underline] Choose the action you want to do[/bold #ff69b4]\n"),
-            width=60,
+            width=60
         )
     )
 
@@ -83,10 +108,10 @@ def ask_action():
         message="\nChoose an action:",
         choices=[
             "Encrypt",
-            "Decrypt",
+            "Decrypt"
         ],
         qmark="",
-        pointer="➤ ",
+        pointer="➤ "
     ).execute()
 
     return action_chosen
