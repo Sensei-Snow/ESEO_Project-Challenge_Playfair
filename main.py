@@ -9,10 +9,12 @@ Description: This file contains the main function with the structure of the prog
 
 __version__ = "Beta"
 
-from utils import playfair_alphabet, welcome_screen, ask_start, ask_algorithm, ask_action, ask_text_valid
+from utils import playfair_alphabet, welcome_screen, ask_start, ask_algorithm, ask_action, ask_text_valid, encrypt, decrypt
 from update import is_update_available, ask_update, download_new_version
-from playfair_functions import creerGrille, indicesDansGrille, afficherGrille, creerDigrammes, chiffrerDigrammes, dechiffrerDigrammes
-
+from rich.console import Console
+from rich.panel import Panel
+from rich.align import Align
+# from playfair_functions import creerGrille, indicesDansGrille, afficherGrille, creerDigrammes, chiffrerDigrammes, dechiffrerDigrammes
 
 def main():
     welcome_screen()
@@ -32,31 +34,37 @@ def main():
     algorithm_chosen = ask_algorithm()
     action = ask_action()
 
+    match action:
+        case "Encrypt":
+            print("\n\n")
+            console = Console()
+            console.print(
+                Panel(
+                    Align.center(
+                        "\n[bold #ff69b4][underline]Step 3:[/underline] Encrypt the text[/bold #ff69b4]\n"),
+                    width=60
+                )
+            )
+            print("\n")
+            text = ask_text_valid("text_to_encrypt")
+            key = ask_text_valid("key")
+            print("\n")
+            encrypt(algorithm_chosen, text, key)
+        case "Decrypt":
+            print("\n\n")
+            console = Console()
+            console.print(
+                Panel(
+                    Align.center(
+                        "\n[bold #ff69b4][underline]Step 3:[/underline] Decrypt the text[/bold #ff69b4]\n"),
+                    width=60
+                )
+            )
+            print("\n")
+            text = ask_text_valid("text_to_decrypt")
+            key = ask_text_valid("key")
+            print("\n")
+            decrypt(algorithm_chosen, text, key)
+
 if __name__ == "__main__":
-    #main()
-
-    # text = ask_text_valid("text_to_encrypt")
-    # key = ask_text_valid("key")
-    # divided_tab = creerGrille(key, playfair_alphabet, True)
-    # complete_tab = creerGrille(key, playfair_alphabet, False)
-    # print(divided_tab)
-    # print(complete_tab)
-    #
-    # char = "B"
-    # print(indicesDansGrille(char, divided_tab))
-    #
-    # afficherGrille(divided_tab)
-
-    #print(creerDigrammes("Hello..."))
-
-    # tab = [[' ', '!', "'", ',', '-', '.'],
-    #        ['?', '@', 'A', 'B', 'C', 'D'],
-    #        ['E', 'F', 'G', 'H', 'I', 'J'],
-    #        ['K', 'L', 'M', 'N', 'O', 'P'],
-    #        ['Q', 'R', 'S', 'T', 'U', 'V'],
-    #        ['W', 'X', 'Y', 'Z', '_', '§']]
-    #
-    # digramme = [('H', 'R')]
-    #
-    # print(dechiffrerDigrammes(digramme, tab))
-
+    main()

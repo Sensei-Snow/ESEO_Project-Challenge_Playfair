@@ -3,7 +3,7 @@ Name: utils.py
 Author: Arthur RETAILLAUD E1
 Contact: arthur.retaillaud@reseau.eseo.fr
 Date of creation: 29/04/2026
-Date of last modifications: 01/05/2026
+Date of last modifications: 06/05/2026
 Description: This file contains all the functions related to the user interface of the program, such as the welcome screen, the configuration questions, and the text and key input. It also contains some public variables that are used in other files, such as the alphabet used for the Playfair cipher.
 '''
 
@@ -11,6 +11,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
 from InquirerPy import inquirer
+from playfair_functions import creerGrille, indicesDansGrille, afficherGrille, creerDigrammes, chiffrerDigrammes, dechiffrerDigrammes
 
 #------------------------------------------------------------------------------Public variables
 playfair_alphabet = (" ", "!", "'", ",", "-", ".", "?", "@",
@@ -123,6 +124,8 @@ def ask_text_valid(parameter):
     while not valid:
         if parameter == "text_to_encrypt":
             input_text = input("Please enter your text to encrypt: ")
+        elif parameter == "text_to_decrypt":
+            input_text = input("Please enter your text to decrypt: ")
         elif parameter == "key":
             input_text = input("Please enter your key: ")
 
@@ -138,5 +141,22 @@ def ask_text_valid(parameter):
             valid = True
 
     return input_text_high
+
+#---------------------------------------Encrypt and decrypt
+def encrypt(algorithm_chosen, text, key):
+    match algorithm_chosen:
+        case "Playfair":
+            print("[INFO] -- Creating tab")
+            tab = creerGrille(key, playfair_alphabet, True)
+            print("[INFO] -- Creating digrammes")
+            digrammes_tab = creerDigrammes(text)
+            print("[INFO] -- Encrypting digrammes")
+            chiffrer_tab = chiffrerDigrammes(digrammes_tab, tab)
+
+            return ''.join(str(element) for ligne in chiffrer_tab for element in ligne)
+
+
+def decrypt(algorithm_chosen, text, key):
+    print("TODO")
 
 #------------------------------------------------------------------------------Private functions
