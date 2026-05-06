@@ -1,5 +1,5 @@
 '''
-Name: playfair_encrypt_functions.py
+Name: playfair_functions.py
 Author: Arthur RETAILLAUD E1
 Contact: arthur.retaillaud@reseau.eseo.fr
 Date of creation: 29/04/2026
@@ -119,3 +119,46 @@ def chiffrerDigrammes(digramme_tab, tab):
         chiffrer_tab.append(digramme_chiffrer)
 
     return chiffrer_tab
+
+def dechiffrerDigrammes(digramme_chiffrer_tab, tab):
+    dechiffrer_tab = []
+
+    for digramme in digramme_chiffrer_tab:
+        coordonnees1 = indicesDansGrille(digramme[0], tab)
+        coordonnees2 = indicesDansGrille(digramme[1], tab)
+
+        if coordonnees1[0] == coordonnees2[0]:
+            try:
+                new_character1 = tab[coordonnees1[0]][coordonnees1[1]-1]
+            except:
+                new_character1 = tab[coordonnees1[0]][coordonnees1[1]+5]
+
+            try:
+                new_character2 = tab[coordonnees2[0]][coordonnees2[1]-1]
+            except:
+                new_character2 = tab[coordonnees2[0]][coordonnees2[1]+5]
+
+            digramme_chiffrer = (new_character1, new_character2)
+
+        elif coordonnees1[1] == coordonnees2[1]:
+            try:
+                new_character1 = tab[coordonnees1[0]-1][coordonnees1[1]]
+            except:
+                new_character1 = tab[coordonnees1[0]+5][coordonnees1[1]]
+
+            try:
+                new_character2 = tab[coordonnees2[0]-1][coordonnees2[1]]
+            except:
+                new_character2 = tab[coordonnees2[0]+5][coordonnees2[1]]
+
+            digramme_chiffrer = (new_character1, new_character2)
+
+        else:
+            new_character1 = tab[coordonnees1[0]][coordonnees2[1]]
+            new_character2 = tab[coordonnees2[0]][coordonnees1[1]]
+
+            digramme_chiffrer = (new_character1, new_character2)
+
+        dechiffrer_tab.append(digramme_chiffrer)
+
+    return dechiffrer_tab

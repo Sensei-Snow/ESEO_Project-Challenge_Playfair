@@ -11,7 +11,7 @@ __version__ = "Beta"
 
 from utils import playfair_alphabet, welcome_screen, ask_start, ask_algorithm, ask_action, ask_text_valid
 from update import is_update_available, ask_update, download_new_version
-from playfair_encrypt_functions import creerGrille, indicesDansGrille, afficherGrille, creerDigrammes, chiffrerDigrammes
+from playfair_functions import creerGrille, indicesDansGrille, afficherGrille, creerDigrammes, chiffrerDigrammes, dechiffrerDigrammes
 
 
 def main():
@@ -49,13 +49,14 @@ if __name__ == "__main__":
 
     #print(creerDigrammes("Hello..."))
 
-    tab = [[' ', '!', "'", ',', '-', '.'],
-           ['?', '@', 'A', 'B', 'C', 'D'],
-           ['E', 'F', 'G', 'H', 'I', 'J'],
-           ['K', 'L', 'M', 'N', 'O', 'P'],
-           ['Q', 'R', 'S', 'T', 'U', 'V'],
-           ['W', 'X', 'Y', 'Z', '_', '§']]
+    # tab = [[' ', '!', "'", ',', '-', '.'],
+    #        ['?', '@', 'A', 'B', 'C', 'D'],
+    #        ['E', 'F', 'G', 'H', 'I', 'J'],
+    #        ['K', 'L', 'M', 'N', 'O', 'P'],
+    #        ['Q', 'R', 'S', 'T', 'U', 'V'],
+    #        ['W', 'X', 'Y', 'Z', '_', '§']]
+    #
+    # digramme = [('H', 'R')]
+    #
+    # print(dechiffrerDigrammes(digramme, tab))
 
-    digramme = [('L', '!')]
-
-    print(chiffrerDigrammes(digramme, tab))
