@@ -17,8 +17,6 @@ from rich.align import Align
 from playfair_functions import clear_digrammes
 import os
 
-#TODO: Transformer les match/case inutiles en if/else
-
 def main():
     welcome_screen()
 
@@ -38,59 +36,58 @@ def main():
 
     action = ask_action()
 
-    match action:
-        case "Encrypt":
-            print("\n\n")
-            console = Console()
-            console.print(
-                Panel(
-                    Align.center(
-                        "\n[bold #ff69b4][underline]Step 3:[/underline] Encrypt the text[/bold #ff69b4]\n"),
-                    width=60
-                )
+    if action == "Encrypt":
+        print("\n\n")
+        console = Console()
+        console.print(
+            Panel(
+                Align.center(
+                    "\n[bold #ff69b4][underline]Step 3:[/underline] Encrypt the text[/bold #ff69b4]\n"),
+                width=60
             )
-            print("\n")
+        )
+        print("\n")
 
-            text = input_text()
+        text = input_text()
 
-            key = ask_text_valid("key")
+        key = ask_text_valid("key")
 
-            print("\n")
-            encrypt_text = encrypt(algorithm_chosen, text, key)
+        print("\n")
+        encrypt_text = encrypt(algorithm_chosen, text, key)
 
-            input_method = ask_input_method()
-            if input_method == "Raw text":
-                print(f"\n[INFO] -- Text encrypted : {encrypt_text}")
-            else:
-                save_text(encrypt_text)
+        input_method = ask_input_method()
+        if input_method == "Raw text":
+            print(f"\n[INFO] -- Text encrypted : {encrypt_text}")
+        else:
+            save_text(encrypt_text)
 
-        case "Decrypt":
-            print("\n\n")
-            console = Console()
-            console.print(
-                Panel(
-                    Align.center(
-                        "\n[bold #ff69b4][underline]Step 3:[/underline] Decrypt the text[/bold #ff69b4]\n"),
-                    width=60
-                )
+    else:
+        print("\n\n")
+        console = Console()
+        console.print(
+            Panel(
+                Align.center(
+                    "\n[bold #ff69b4][underline]Step 3:[/underline] Decrypt the text[/bold #ff69b4]\n"),
+                width=60
             )
-            print("\n")
+        )
+        print("\n")
 
-            text = input_text()
+        text = input_text()
 
-            key = ask_text_valid("key")
+        key = ask_text_valid("key")
 
-            print("\n")
-            texte_dechiffrer_dirty = decrypt(algorithm_chosen, text, key)
-            texte_dechiffrer_clear = clear_digrammes(texte_dechiffrer_dirty)
-            texte_minus = texte_dechiffrer_clear.lower()
-            texte_dechiffrer = texte_minus.capitalize()
+        print("\n")
+        texte_dechiffrer_dirty = decrypt(algorithm_chosen, text, key)
+        texte_dechiffrer_clear = clear_digrammes(texte_dechiffrer_dirty)
+        texte_minus = texte_dechiffrer_clear.lower()
+        texte_dechiffrer = texte_minus.capitalize()
 
-            input_method = ask_input_method()
-            if input_method == "Raw text":
-                print(f"\n[INFO] -- Text decrypted : {texte_dechiffrer}")
-            else:
-                save_text(texte_dechiffrer)
+        input_method = ask_input_method()
+        if input_method == "Raw text":
+            print(f"\n[INFO] -- Text decrypted : {texte_dechiffrer}")
+        else:
+            save_text(texte_dechiffrer)
 
 if __name__ == "__main__":
     main()
