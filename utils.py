@@ -3,7 +3,7 @@ Name: utils.py
 Author: Arthur RETAILLAUD E1
 Contact: arthur.retaillaud@reseau.eseo.fr
 Date of creation: 29/04/2026
-Date of last modifications: 06/05/2026
+Date of last modifications: 11/05/2026
 Description: This file contains all the functions related to the user interface of the program, such as the welcome screen, the configuration questions, and the text and key input. It also contains some public variables that are used in other files, such as the alphabet used for the Playfair cipher.
 '''
 
@@ -12,6 +12,9 @@ from rich.panel import Panel
 from rich.align import Align
 from InquirerPy import inquirer
 from playfair_functions import creerGrille, indicesDansGrille, afficherGrille, creerDigrammes, chiffrerDigrammes, dechiffrerDigrammes
+import os
+
+#TODO: Appliquer la vérification des caractères pour l'importation de fichiers
 
 #------------------------------------------------------------------------------Public variables
 playfair_alphabet = (" ", "!", "'", ",", "-", ".", "?", "@",
@@ -116,6 +119,50 @@ def ask_action():
     ).execute()
 
     return action_chosen
+
+def ask_input_method():
+    console = Console()
+    console.print(
+        Panel(
+            Align.center(
+                "\n[bold #ff69b4]Choose the input method for original text[/bold #ff69b4]\n"),
+            width=60
+        )
+    )
+
+    method_chosen = inquirer.select(
+        message="\nChoose an action:",
+        choices=[
+            "Raw text",
+            "File input"
+        ],
+        qmark="",
+        pointer="➤ "
+    ).execute()
+
+    return method_chosen
+
+def input_text():
+    text = ""
+    method_chosen = ask_input_method()
+    if method_chosen == "Raw text":
+        text = ask_text_valid("text_to_encrypt")
+    else:
+        while True:
+            path = input("Enter the file path: ")
+            if os.path.exists(path):
+                break
+            else:
+                print("\n[ERROR] -- The file path does not exist.")
+                continue
+        with open(path, 'r') as file:
+            text = file.read()
+
+    return text
+
+def save_text(text):
+    with open("output.txt", 'w') as file:
+        file.write(text)
 
 #---------------------------------------Ask text and key
 def ask_text_valid(parameter):

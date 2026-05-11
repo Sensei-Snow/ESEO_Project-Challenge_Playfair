@@ -3,18 +3,21 @@ Name: main.py
 Author: Arthur RETAILLAUD E1
 Contact: arthur.retaillaud@reseau.eseo.fr
 Date of creation: 29/04/2026
-Date of last modifications: 06/05/2026
+Date of last modifications: 11/05/2026
 Description: This file contains the main function with the structure of the program.
 '''
 
 __version__ = "Beta"
 
-from utils import playfair_alphabet, welcome_screen, ask_start, ask_algorithm, ask_action, ask_text_valid, encrypt, decrypt
+from utils import welcome_screen, ask_start, ask_algorithm, ask_action, ask_input_method, input_text, ask_text_valid, save_text, encrypt, decrypt
 from update import is_update_available, ask_update, download_new_version
 from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
-from playfair_functions import creerGrille, indicesDansGrille, afficherGrille, creerDigrammes, chiffrerDigrammes, dechiffrerDigrammes, clear_digrammes
+from playfair_functions import clear_digrammes
+import os
+
+#TODO: Transformer les match/case inutiles en if/else
 
 def main():
     welcome_screen()
@@ -32,6 +35,7 @@ def main():
             exit()
 
     algorithm_chosen = ask_algorithm()
+
     action = ask_action()
 
     match action:
@@ -46,11 +50,19 @@ def main():
                 )
             )
             print("\n")
-            text = ask_text_valid("text_to_encrypt")
+
+            text = input_text()
+
             key = ask_text_valid("key")
+
             print("\n")
             encrypt_text = encrypt(algorithm_chosen, text, key)
-            print(f"\n[INFO] -- Text encrypted : {encrypt_text}")
+
+            input_method = ask_input_method()
+            if input_method == "Raw text":
+                print(f"\n[INFO] -- Text encrypted : {encrypt_text}")
+            else:
+                save_text(encrypt_text)
 
         case "Decrypt":
             print("\n\n")
@@ -63,14 +75,22 @@ def main():
                 )
             )
             print("\n")
-            text = ask_text_valid("text_to_decrypt")
+
+            text = input_text()
+
             key = ask_text_valid("key")
+
             print("\n")
             texte_dechiffrer_dirty = decrypt(algorithm_chosen, text, key)
             texte_dechiffrer_clear = clear_digrammes(texte_dechiffrer_dirty)
             texte_minus = texte_dechiffrer_clear.lower()
             texte_dechiffrer = texte_minus.capitalize()
-            print(f"\n[INFO] -- Text decrypted : {texte_dechiffrer}")
+
+            input_method = ask_input_method()
+            if input_method == "Raw text":
+                print(f"\n[INFO] -- Text decrypted : {texte_dechiffrer}")
+            else:
+                save_text(texte_dechiffrer)
 
 if __name__ == "__main__":
     main()
