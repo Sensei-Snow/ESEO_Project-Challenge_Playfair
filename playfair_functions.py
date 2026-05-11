@@ -162,3 +162,6 @@ def dechiffrerDigrammes(digramme_chiffrer_tab, tab):
         dechiffrer_tab.append(digramme_chiffrer)
 
     return dechiffrer_tab
+
+def clear_digrammes(dirty_text):
+    return dirty_text.replace('§', '')

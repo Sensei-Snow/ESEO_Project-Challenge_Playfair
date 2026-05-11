@@ -156,7 +156,16 @@ def encrypt(algorithm_chosen, text, key):
             return ''.join(str(element) for ligne in chiffrer_tab for element in ligne)
 
 
-def decrypt(algorithm_chosen, text, key):
-    print("TODO")
+def decrypt(algorithm_chosen, text_chiffrer, key):
+    match algorithm_chosen:
+        case "Playfair":
+            print("[INFO] -- Creating tab")
+            tab = creerGrille(key, playfair_alphabet, True)
+            print("[INFO] -- Creating digrammes")
+            digrammes_tab = creerDigrammes(text_chiffrer)
+            print("[INFO] -- Decrypting digrammes")
+            dechiffrer_tab = dechiffrerDigrammes(digrammes_tab, tab)
+
+            return ''.join(str(element) for ligne in dechiffrer_tab for element in ligne)
 
 #------------------------------------------------------------------------------Private functions

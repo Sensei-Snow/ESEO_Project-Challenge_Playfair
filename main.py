@@ -14,7 +14,7 @@ from update import is_update_available, ask_update, download_new_version
 from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
-# from playfair_functions import creerGrille, indicesDansGrille, afficherGrille, creerDigrammes, chiffrerDigrammes, dechiffrerDigrammes
+from playfair_functions import creerGrille, indicesDansGrille, afficherGrille, creerDigrammes, chiffrerDigrammes, dechiffrerDigrammes, clear_digrammes
 
 def main():
     welcome_screen()
@@ -49,7 +49,9 @@ def main():
             text = ask_text_valid("text_to_encrypt")
             key = ask_text_valid("key")
             print("\n")
-            encrypt(algorithm_chosen, text, key)
+            encrypt_text = encrypt(algorithm_chosen, text, key)
+            print(f"\n[INFO] -- Text encrypted : {encrypt_text}")
+
         case "Decrypt":
             print("\n\n")
             console = Console()
@@ -64,7 +66,11 @@ def main():
             text = ask_text_valid("text_to_decrypt")
             key = ask_text_valid("key")
             print("\n")
-            decrypt(algorithm_chosen, text, key)
+            texte_dechiffrer_dirty = decrypt(algorithm_chosen, text, key)
+            texte_dechiffrer_clear = clear_digrammes(texte_dechiffrer_dirty)
+            texte_minus = texte_dechiffrer_clear.lower()
+            texte_dechiffrer = texte_minus.capitalize()
+            print(f"\n[INFO] -- Text decrypted : {texte_dechiffrer}")
 
 if __name__ == "__main__":
     main()
