@@ -3,24 +3,23 @@ Name: main.py
 Author: Arthur RETAILLAUD E1
 Contact: arthur.retaillaud@reseau.eseo.fr
 Date of creation: 29/04/2026
-Date of last modifications: 11/05/2026
+Date of last modifications: 12/05/2026
 Description: This file contains the main function with the structure of the program.
 '''
 
 __version__ = "Beta"
 
-from utils import welcome_screen, ask_start, ask_algorithm, ask_action, ask_input_method, input_text, ask_text_valid, save_text, encrypt, decrypt
+from utils import welcome_screen, choose_action_start, choose_algorithm, choose_encrypt_decrypt, choose_text_file, ask_input_text, ask_text_valid, is_input_text_valid, save_text, encrypt, decrypt
 from update import is_update_available, ask_update, download_new_version
 from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
 from playfair_functions import clear_digrammes
-import os
 
 def main():
     welcome_screen()
 
-    action_chosen = ask_start()
+    action_chosen = choose_action_start()
     match action_chosen:
         case "Check for updates":
             print("\n")
@@ -32,9 +31,9 @@ def main():
             print("\nThank you for visiting. We hope to see you again soon.")
             exit()
 
-    algorithm_chosen = ask_algorithm()
+    algorithm_chosen = choose_algorithm()
 
-    action = ask_action()
+    action = choose_encrypt_decrypt()
 
     if action == "Encrypt":
         print("\n\n")
@@ -48,14 +47,15 @@ def main():
         )
         print("\n")
 
-        text = input_text()
+        text = ask_input_text()
 
         key = ask_text_valid("key")
 
         print("\n")
         encrypt_text = encrypt(algorithm_chosen, text, key)
 
-        input_method = ask_input_method()
+        print("\n")
+        input_method = choose_text_file("output")
         if input_method == "Raw text":
             print(f"\n[INFO] -- Text encrypted : {encrypt_text}")
         else:
@@ -73,7 +73,7 @@ def main():
         )
         print("\n")
 
-        text = input_text()
+        text = ask_input_text()
 
         key = ask_text_valid("key")
 
@@ -83,7 +83,7 @@ def main():
         texte_minus = texte_dechiffrer_clear.lower()
         texte_dechiffrer = texte_minus.capitalize()
 
-        input_method = ask_input_method()
+        input_method = choose_text_file("output")
         if input_method == "Raw text":
             print(f"\n[INFO] -- Text decrypted : {texte_dechiffrer}")
         else:

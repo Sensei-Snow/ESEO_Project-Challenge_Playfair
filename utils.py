@@ -3,7 +3,7 @@ Name: utils.py
 Author: Arthur RETAILLAUD E1
 Contact: arthur.retaillaud@reseau.eseo.fr
 Date of creation: 29/04/2026
-Date of last modifications: 11/05/2026
+Date of last modifications: 12/05/2026
 Description: This file contains all the functions related to the user interface of the program, such as the welcome screen, the configuration questions, and the text and key input. It also contains some public variables that are used in other files, such as the alphabet used for the Playfair cipher.
 '''
 
@@ -50,9 +50,24 @@ def welcome_screen():
             )
         )
     )
+    print("\n")
+    console.print(Align.center(
+        Panel(
+            Align.center("\n[magenta][underline]To all people that were following me and watching me on Twitch during the programmation of this project[/underline][/magenta]\n"
+                         "\n[magenta]yoongi_sama7[/magenta]\n"
+                         "[magenta]chockinyan[/magenta]\n"
+                         "[magenta]xhister[/magenta]\n"
+                         "[magenta]un_nain_tello[/magenta]\n"
+                         "[magenta]kajy44[/magenta]\n"
+                         "[magenta]symsym_1629[/magenta]\n"),
+            title="Thanks !",
+            width=80
+        )
+    )
+    )
 
 #---------------------------------------Ask configuration
-def ask_start():
+def choose_action_start():
     print("\n\n")
     console = Console()
     console.print(
@@ -76,7 +91,7 @@ def ask_start():
 
     return action_chosen
 
-def ask_algorithm():
+def choose_algorithm():
     print("\n\n")
     console = Console()
     console.print(
@@ -98,7 +113,7 @@ def ask_algorithm():
 
     return algorithm_chosen
 
-def ask_action():
+def choose_encrypt_decrypt():
     print("\n\n")
     console = Console()
     console.print(
@@ -120,12 +135,17 @@ def ask_action():
 
     return action_chosen
 
-def ask_input_method():
+#---------------------------------------User encryption/decryption configuration
+def choose_text_file(parameter):
+    if parameter == "input":
+        panel_text = "\n[bold #ff69b4]Choose the input method for original text[/bold #ff69b4]\n"
+    else:
+        panel_text = "\n[bold #ff69b4]Choose the output method for new text[/bold #ff69b4]\n"
+
     console = Console()
     console.print(
         Panel(
-            Align.center(
-                "\n[bold #ff69b4]Choose the input method for original text[/bold #ff69b4]\n"),
+            Align.center(panel_text),
             width=60
         )
     )
@@ -142,25 +162,34 @@ def ask_input_method():
 
     return method_chosen
 
-def input_text():
+def ask_input_text():
     text = ""
-    method_chosen = ask_input_method()
+    method_chosen = choose_text_file("input")
     if method_chosen == "Raw text":
+        print("\n")
         text = ask_text_valid("text_to_encrypt")
     else:
+        #TODO: URGENT -- RÉPARER CE TRUC
         while True:
-            path = input("Enter the file path: ")
+            path = input("\nEnter the file path: ")
             if os.path.exists(path):
                 break
             else:
-                print("\n[ERROR] -- The file path does not exist.")
+                print("\n[ERROR] -- The file path does not exist")
                 continue
-        with open(path, 'r') as file:
-            text = file.read()
+        while True:
+            with open(path, 'r') as file:
+                text = file.read()
+            if is_input_text_valid(text):
+                break
+            else:
+                print("\n[ERROR] -- The input text is not valid")
+                continue
 
     return text
 
 def save_text(text):
+    print("\n[INFO] -- Save the text to file output.txt")
     with open("output.txt", 'w') as file:
         file.write(text)
 
@@ -173,21 +202,20 @@ def ask_text_valid(parameter):
             input_text = input("Please enter your text to encrypt: ")
         elif parameter == "text_to_decrypt":
             input_text = input("Please enter your text to decrypt: ")
-        elif parameter == "key":
+        else:
             input_text = input("Please enter your key: ")
 
-        input_text_high = input_text.upper()
-        len_input_text = len(input_text)
-        num_good_chars = 0
-        for char in input_text_high:
-            if char not in playfair_alphabet:
-                print(f"[ERROR] -- Invalid character found in you input text : \"{char.lower()}\"")
-            else:
-                num_good_chars += 1
-        if num_good_chars == len_input_text:
-            valid = True
+        valid = is_input_text_valid(input_text)
 
-    return input_text_high
+    return input_text.upper()
+
+def is_input_text_valid(text):
+    input_text_high = text.upper()
+    for char in input_text_high:
+        if char not in playfair_alphabet:
+            print(f"[ERROR] -- Invalid character found in you input text : \"{char.lower()}\"")
+            return False
+    return True
 
 #---------------------------------------Encrypt and decrypt
 def encrypt(algorithm_chosen, text, key):
