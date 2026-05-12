@@ -3,7 +3,7 @@ Name: utils.py
 Author: Arthur RETAILLAUD E1
 Contact: arthur.retaillaud@reseau.eseo.fr
 Date of creation: 29/04/2026
-Date of last modifications: 12/05/2026
+Date of last modifications: 13/05/2026
 Description: This file contains all the functions related to the user interface of the program, such as the welcome screen, the configuration questions, and the text and key input. It also contains some public variables that are used in other files, such as the alphabet used for the Playfair cipher.
 '''
 
@@ -25,6 +25,9 @@ playfair_alphabet = (" ", "!", "'", ",", "-", ".", "?", "@",
 
 #------------------------------------------------------------------------------Public functions
 #---------------------------------------Welcome screen
+'''
+Brief: Affiche un écran de bienvenue
+'''
 def welcome_screen():
     print("\n")
     console = Console()
@@ -59,14 +62,19 @@ def welcome_screen():
                          "[magenta]xhister[/magenta]\n"
                          "[magenta]un_nain_tello[/magenta]\n"
                          "[magenta]kajy44[/magenta]\n"
-                         "[magenta]symsym_1629[/magenta]\n"),
+                         "[magenta]symsym_1629[/magenta]\n"
+                         "[magenta]Toinou_DEV[/magenta]\n"),
             title="Thanks !",
             width=80
+            )
         )
-    )
     )
 
 #---------------------------------------Ask configuration
+'''
+Brief: Demande à l'utilisateur ce qu'il souhaite faire au démarrage du programme
+Return [str]: Le texte associé à l'action voulue
+'''
 def choose_action_start():
     print("\n\n")
     console = Console()
@@ -91,6 +99,10 @@ def choose_action_start():
 
     return action_chosen
 
+'''
+Brief: Demande à l'utilisateur l'algorithme de chiffrement qu'il souhaite utiliser
+Return [str]: Le texte associé au chiffrement voulu
+'''
 def choose_algorithm():
     print("\n\n")
     console = Console()
@@ -113,6 +125,10 @@ def choose_algorithm():
 
     return algorithm_chosen
 
+'''
+Brief: Demande à l'utilisateur l'action à exécuter avec l'algorithme
+Return [str]: Le texte associé à l'action voulue
+'''
 def choose_encrypt_decrypt():
     print("\n\n")
     console = Console()
@@ -136,6 +152,10 @@ def choose_encrypt_decrypt():
     return action_chosen
 
 #---------------------------------------User encryption/decryption configuration
+'''
+Brief: Demande à l'utilisateur la méthode qu'il veut utiliser pour utiliser son texte
+Return [str]: Le texte associé à la méthode voulue
+'''
 def choose_text_file(parameter):
     if parameter == "input":
         panel_text = "\n[bold #ff69b4]Choose the input method for original text[/bold #ff69b4]\n"
@@ -162,6 +182,10 @@ def choose_text_file(parameter):
 
     return method_chosen
 
+'''
+Brief: Demande à l'utilisateur un texte en entrée via une entrée ou un fichier puis vérifie la validité du texte
+Return [str]: Le texte à utiliser
+'''
 def ask_input_text():
     text = ""
     method_chosen = choose_text_file("input")
@@ -188,14 +212,24 @@ def ask_input_text():
 
     return text
 
+'''
+Brief: Enregistre le texte de sortie dans un fichier
+Parameter (text) [str]: Le texte de sortie à enregistrer
+'''
 def save_text(text):
     print("\n[INFO] -- Save the text to file output.txt")
     with open("output.txt", 'w') as file:
         file.write(text)
 
 #---------------------------------------Ask text and key
+'''
+Brief: Demande à l'utilisateur d'entrer un texte qui sera ensuite vérifier
+Parameter (parameter) [str]: Décrit l'entrée utilisateur souhaitée
+Return [str]: Le texte en majuscule, prêt à être utilisé
+'''
 def ask_text_valid(parameter):
     valid  = False
+    input_text = ""
 
     while not valid:
         if parameter == "text_to_encrypt":
@@ -209,6 +243,11 @@ def ask_text_valid(parameter):
 
     return input_text.upper()
 
+'''
+Brief: Vérifie la validité d'un texte
+Parameter (text) [str]: Le texte à vérifier
+Return [bool]: True si le texte est valide, False sinon
+'''
 def is_input_text_valid(text):
     input_text_high = text.upper()
     for char in input_text_high:
@@ -218,6 +257,13 @@ def is_input_text_valid(text):
     return True
 
 #---------------------------------------Encrypt and decrypt
+'''
+Brief: Chiffre un texte avec une clé grâce à une méthode de chiffrement
+Parameter (algorithm) [str]: L'algorithme choisi
+Parameter (text) [str]: Le texte à chiffrer
+Parameter (key) [str]: La clé de chiffrement
+Return [str]: Le texte chiffré
+'''
 def encrypt(algorithm_chosen, text, key):
     match algorithm_chosen:
         case "Playfair":
@@ -230,7 +276,13 @@ def encrypt(algorithm_chosen, text, key):
 
             return ''.join(str(element) for ligne in chiffrer_tab for element in ligne)
 
-
+'''
+Brief: Déchiffre un texte avec une clé grâce à une méthode de chiffrement
+Parameter (algorithm) [str]: L'algorithme choisi
+Parameter (text) [str]: Le texte à déchiffrer
+Parameter (key) [str]: La clé de chiffrement
+Return [str]: Le texte déchiffré
+'''
 def decrypt(algorithm_chosen, text_chiffrer, key):
     match algorithm_chosen:
         case "Playfair":

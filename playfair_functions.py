@@ -3,10 +3,17 @@ Name: playfair_functions.py
 Author: Arthur RETAILLAUD E1
 Contact: arthur.retaillaud@reseau.eseo.fr
 Date of creation: 29/04/2026
-Date of last modifications: 11/05/2026
+Date of last modifications: 13/05/2026
 Description: This file contains all the functions related to the Playfair encryption method.
 '''
 
+'''
+Brief: Créer la grille contenant la key et le reste des caractères de l'alphabet Playfair
+Parameter (passphrase) [str]: La key choisie par l'utilisateur
+Parameter (playfair_alphabet) [list]: L'alphabet Playfair
+Parameter (divided_tab) [bool]: Un booléen qui indique si la grille doit être divisée en sous-tableaux de 6 éléments ou non
+Return [list]: tableau de 36 caractères (divisé ou non en sous-tableaux de 6 éléments) contenant la key et le reste des caractères de l'alphabet Playfair
+'''
 def creerGrille(passphrase, playfair_alphabet, divided_tab):
     tab = []
 
@@ -23,6 +30,12 @@ def creerGrille(passphrase, playfair_alphabet, divided_tab):
     else:
         return tab
 
+'''
+Brief: Donne la position d'un caractère dans un tableau à deux dimensions
+Parameter (char) [str]: Le caractère à chercher
+Parameter (tab) [list]: Le tableau à deux dimensions dans lequel chercher le caractère
+Return [tuple]: La position avec ligne/colonne du caractère
+'''
 def indicesDansGrille(char, tab):
     line = 0
     column =0
@@ -48,10 +61,19 @@ def indicesDansGrille(char, tab):
 
     return (line, column)
 
+'''
+Brief: affiche tout les éléments d'un tableau à deux dimensions
+Parameter (tab) [list]: Le tableau à deux dimensions
+'''
 def afficherGrille(tab):
     for line in tab:
         print(* line, sep=" ")
 
+'''
+Brief: créer les digrammes du texte à chiffrer
+Parameter (text) [str]: Le texte à diviser en digrammes
+Return [list]: Un tableau de digrammes, chaque digramme étant un tuple de deux caractères
+'''
 def creerDigrammes(text):
     upper_text = text.upper()
 
@@ -77,6 +99,12 @@ def creerDigrammes(text):
 
     return digrammes_tab
 
+'''
+Brief: Chiffre un par un des digrammes d'une liste
+Parameter (digramme_tab) [list]: Le tableau contenant les digrammes à chiffrer
+Parameter (tab) [list]: Le tableau à deux dimensions contenant la key et le reste des caractères de l'alphabet Playfair
+Return [list]: Un tableau de digrammes chiffrés, chaque digramme étant un tuple de deux caractères
+'''
 def chiffrerDigrammes(digramme_tab, tab):
     chiffrer_tab = []
 
@@ -120,6 +148,12 @@ def chiffrerDigrammes(digramme_tab, tab):
 
     return chiffrer_tab
 
+'''
+Brief: Déchiffre un par un des digrammes d'une liste
+Parameter (digramme_chiffrer_tab) [list]: Le tableau contenant les digrammes à déchiffrer
+Parameter (tab) [list]: Le tableau à deux dimensions contenant la key et le reste des caractères de l'alphabet Playfair
+Return [list]: Un tableau de digrammes déchiffrés, chaque digramme étant un tuple de deux caractères
+'''
 def dechiffrerDigrammes(digramme_chiffrer_tab, tab):
     dechiffrer_tab = []
 
@@ -163,5 +197,9 @@ def dechiffrerDigrammes(digramme_chiffrer_tab, tab):
 
     return dechiffrer_tab
 
+'''
+Brief: Nettoie les digrammes déchiffrés pour avoir un texte proche de l'original
+Parameter (dirty_text) [str]: Le texte à nettoyer, contenant des caractères de séparation de digrammes
+'''
 def clear_digrammes(dirty_text):
     return dirty_text.replace('§', '')

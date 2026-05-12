@@ -16,6 +16,9 @@ from rich.panel import Panel
 from rich.align import Align
 from playfair_functions import clear_digrammes
 
+'''
+Brief: La fonction principale du programme exécutée en première
+'''
 def main():
     welcome_screen()
 
