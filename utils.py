@@ -11,10 +11,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
 from InquirerPy import inquirer
-from playfair_functions import creerGrille, indicesDansGrille, afficherGrille, creerDigrammes, chiffrerDigrammes, dechiffrerDigrammes
+from playfair_functions import creerGrille, creerDigrammes, chiffrerDigrammes, dechiffrerDigrammes
 import os
-
-#TODO: Appliquer la vérification des caractères pour l'importation de fichiers
 
 #------------------------------------------------------------------------------Public variables
 playfair_alphabet = (" ", "!", "'", ",", "-", ".", "?", "@",
@@ -186,31 +184,38 @@ def choose_text_file(parameter):
 Brief: Demande à l'utilisateur un texte en entrée via une entrée ou un fichier puis vérifie la validité du texte
 Return [str]: Le texte à utiliser
 '''
-def ask_input_text():
+def ask_input_text(parameter_choose_text_file, parameter_ask_text_valid):
     text = ""
-    method_chosen = choose_text_file("input")
+    method_chosen = choose_text_file(parameter_choose_text_file)
     if method_chosen == "Raw text":
         print("\n")
-        text = ask_text_valid("text_to_encrypt")
+        text = ask_text_valid(parameter_ask_text_valid)
     else:
-        #TODO: URGENT -- RÉPARER CE TRUC
         while True:
             path = input("\nEnter the file path: ")
-            if os.path.exists(path):
-                break
-            else:
+            try:
+                if os.path.exists(path):
+                    with open(path, 'r') as file:
+                        text = file.read()
+                    if is_input_text_valid(text):
+                        break
+                    else:
+                        continue
+            except:
                 print("\n[ERROR] -- The file path does not exist")
                 continue
-        while True:
-            with open(path, 'r') as file:
-                text = file.read()
-            if is_input_text_valid(text):
-                break
-            else:
-                print("\n[ERROR] -- The input text is not valid")
-                continue
-
     return text
+
+'''
+Brief: Exécute la bonne action de sortie
+Parameter (text) [str]: Le texte à utiliser
+'''
+def ask_output_text(text):
+    input_method = choose_text_file("output")
+    if input_method == "Raw text":
+        print(f"\n[INFO] -- Text decrypted : {text}")
+    else:
+        save_text(text)
 
 '''
 Brief: Enregistre le texte de sortie dans un fichier
@@ -242,19 +247,6 @@ def ask_text_valid(parameter):
         valid = is_input_text_valid(input_text)
 
     return input_text.upper()
-
-'''
-Brief: Vérifie la validité d'un texte
-Parameter (text) [str]: Le texte à vérifier
-Return [bool]: True si le texte est valide, False sinon
-'''
-def is_input_text_valid(text):
-    input_text_high = text.upper()
-    for char in input_text_high:
-        if char not in playfair_alphabet:
-            print(f"[ERROR] -- Invalid character found in you input text : \"{char.lower()}\"")
-            return False
-    return True
 
 #---------------------------------------Encrypt and decrypt
 '''
@@ -293,6 +285,21 @@ def decrypt(algorithm_chosen, text_chiffrer, key):
             print("[INFO] -- Decrypting digrammes")
             dechiffrer_tab = dechiffrerDigrammes(digrammes_tab, tab)
 
-            return ''.join(str(element) for ligne in dechiffrer_tab for element in ligne)
+            decrypt_text_dirty = ''.join(str(element) for ligne in dechiffrer_tab for element in ligne)
+            decrypt_text_clear = decrypt_text_dirty.replace('§', '')
+            decrypt_text_minus = decrypt_text_clear.lower()
+            return decrypt_text_minus.capitalize()
 
 #------------------------------------------------------------------------------Private functions
+'''
+Brief: Vérifie la validité d'un texte
+Parameter (text) [str]: Le texte à vérifier
+Return [bool]: True si le texte est valide, False sinon
+'''
+def is_input_text_valid(text):
+    input_text_high = text.upper()
+    for char in input_text_high:
+        if char not in playfair_alphabet:
+            print(f"\n[ERROR] -- Invalid character found in you input text : \"{char.lower()}\"")
+            return False
+    return True

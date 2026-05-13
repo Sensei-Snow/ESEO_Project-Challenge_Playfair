@@ -196,10 +196,3 @@ def dechiffrerDigrammes(digramme_chiffrer_tab, tab):
         dechiffrer_tab.append(digramme_chiffrer)
 
     return dechiffrer_tab
-
-'''
-Brief: Nettoie les digrammes déchiffrés pour avoir un texte proche de l'original
-Parameter (dirty_text) [str]: Le texte à nettoyer, contenant des caractères de séparation de digrammes
-'''
-def clear_digrammes(dirty_text):
-    return dirty_text.replace('§', '')

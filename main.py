@@ -7,21 +7,22 @@ Date of last modifications: 12/05/2026
 Description: This file contains the main function with the structure of the program.
 '''
 
-__version__ = "Beta"
+__version__ = "V1.0.0"
 
-from utils import welcome_screen, choose_action_start, choose_algorithm, choose_encrypt_decrypt, choose_text_file, ask_input_text, ask_text_valid, is_input_text_valid, save_text, encrypt, decrypt
+from utils import welcome_screen, choose_action_start, choose_algorithm, choose_encrypt_decrypt, ask_input_text, ask_output_text, ask_text_valid, encrypt, decrypt
 from update import is_update_available, ask_update, download_new_version
 from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
-from playfair_functions import clear_digrammes
 
 '''
 Brief: La fonction principale du programme exécutée en première
 '''
 def main():
+    # Écran d'accueil
     welcome_screen()
 
+    # Choix de l'action au démarrage
     action_chosen = choose_action_start()
     match action_chosen:
         case "Check for updates":
@@ -34,11 +35,14 @@ def main():
             print("\nThank you for visiting. We hope to see you again soon.")
             exit()
 
+    # Choix de l'algorithme
     algorithm_chosen = choose_algorithm()
 
-    action = choose_encrypt_decrypt()
+    # Choix de 'action à exécuter avec l'algorithme
+    action_chosen = choose_encrypt_decrypt()
 
-    if action == "Encrypt":
+    # Chiffrement
+    if action_chosen == "Encrypt":
         print("\n\n")
         console = Console()
         console.print(
@@ -50,20 +54,17 @@ def main():
         )
         print("\n")
 
-        text = ask_input_text()
+        text_input = ask_input_text("input", "text_to_encrypt")
 
         key = ask_text_valid("key")
 
         print("\n")
-        encrypt_text = encrypt(algorithm_chosen, text, key)
+        encrypt_text = encrypt(algorithm_chosen, text_input, key)
 
         print("\n")
-        input_method = choose_text_file("output")
-        if input_method == "Raw text":
-            print(f"\n[INFO] -- Text encrypted : {encrypt_text}")
-        else:
-            save_text(encrypt_text)
+        ask_output_text(encrypt_text)
 
+    # Déchiffrement
     else:
         print("\n\n")
         console = Console()
@@ -76,21 +77,14 @@ def main():
         )
         print("\n")
 
-        text = ask_input_text()
+        text_input = ask_input_text("input", "text_to_decrypt")
 
         key = ask_text_valid("key")
 
-        print("\n")
-        texte_dechiffrer_dirty = decrypt(algorithm_chosen, text, key)
-        texte_dechiffrer_clear = clear_digrammes(texte_dechiffrer_dirty)
-        texte_minus = texte_dechiffrer_clear.lower()
-        texte_dechiffrer = texte_minus.capitalize()
+        decrypt_text = decrypt(algorithm_chosen, text_input, key)
 
-        input_method = choose_text_file("output")
-        if input_method == "Raw text":
-            print(f"\n[INFO] -- Text decrypted : {texte_dechiffrer}")
-        else:
-            save_text(texte_dechiffrer)
+        print("\n")
+        ask_output_text(decrypt_text)
 
 if __name__ == "__main__":
     main()
