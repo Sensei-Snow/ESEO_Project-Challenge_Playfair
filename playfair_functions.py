@@ -1,5 +1,5 @@
 '''
-Name: playfair_functions.py
+Name: playfair.py
 Author: Arthur RETAILLAUD E1
 Contact: arthur.retaillaud@reseau.eseo.fr
 Date of creation: 29/04/2026
@@ -7,6 +7,11 @@ Date of last modifications: 13/05/2026
 Description: This file contains all the functions related to the Playfair encryption method.
 '''
 
+#------------------------------------------------------------------------------Public variables
+
+#------------------------------------------------------------------------------Private variables
+
+#------------------------------------------------------------------------------Public functions
 '''
 Brief: Créer la grille contenant la key et le reste des caractères de l'alphabet Playfair
 Parameter (passphrase) [str]: La key choisie par l'utilisateur
@@ -29,37 +34,6 @@ def creerGrille(passphrase, playfair_alphabet, divided_tab):
         return [tab[i:i + 6] for i in range(0, len(tab), 6)]
     else:
         return tab
-
-'''
-Brief: Donne la position d'un caractère dans un tableau à deux dimensions
-Parameter (char) [str]: Le caractère à chercher
-Parameter (tab) [list]: Le tableau à deux dimensions dans lequel chercher le caractère
-Return [tuple]: La position avec ligne/colonne du caractère
-'''
-def indicesDansGrille(char, tab):
-    line = 0
-    column =0
-
-    character_found = False
-
-    while not character_found:
-        if not character_found and  line < 6:
-            if not character_found and column < 6:
-                if tab[line][column] == char:
-                    character_found = True
-                else:
-                    column += 1
-            else:
-                if not character_found:
-                    line += 1
-                    column = 0
-        else:
-            if character_found:
-                return (line, column)
-            else:
-                return None
-
-    return (line, column)
 
 '''
 Brief: affiche tout les éléments d'un tableau à deux dimensions
@@ -196,3 +170,35 @@ def dechiffrerDigrammes(digramme_chiffrer_tab, tab):
         dechiffrer_tab.append(digramme_chiffrer)
 
     return dechiffrer_tab
+
+#------------------------------------------------------------------------------Private functions
+'''
+Brief: Donne la position d'un caractère dans un tableau à deux dimensions
+Parameter (char) [str]: Le caractère à chercher
+Parameter (tab) [list]: Le tableau à deux dimensions dans lequel chercher le caractère
+Return [tuple]: La position avec ligne/colonne du caractère
+'''
+def indicesDansGrille(char, tab):
+    line = 0
+    column =0
+
+    character_found = False
+
+    while not character_found:
+        if not character_found and  line < 6:
+            if not character_found and column < 6:
+                if tab[line][column] == char:
+                    character_found = True
+                else:
+                    column += 1
+            else:
+                if not character_found:
+                    line += 1
+                    column = 0
+        else:
+            if character_found:
+                return (line, column)
+            else:
+                return None
+
+    return (line, column)
