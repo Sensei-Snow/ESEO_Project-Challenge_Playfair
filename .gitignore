@@ -1,6 +1,7 @@
 /.idea
 /__pycache__
 /verification
+/Version_Prof
 test.py
 test.txt
 output.txt
